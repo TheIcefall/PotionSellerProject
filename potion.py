@@ -13,20 +13,21 @@ class Potion:
 
 
     @classmethod
-    def good_hash(cls, potion_name: str, tablesize: int) -> int:
+    def good_hash(cls, potion_name: str = "", tablesize: int = 1) -> int:
         """"""
         sum = 0
+        a = 1234
         for i in range(len(potion_name)):
-            sum += ord(potion_name[i])*i
-        hash_value = sum//tablesize
-        return hash_value
+            sum = (ord(potion_name[i]) + a*sum) % tablesize
+            a = 2*a + 3
+        return sum
 
     @classmethod
     def bad_hash(cls, potion_name: str, tablesize: int) -> int:
         """"""
         sum = 0
-        for i in range(len(potion_name)):
-            sum += ord(potion_name[i])
-        hash_value = sum//tablesize
-        return hash_value
 
+        for i in range(len(potion_name)):
+            sum += ord(potion_name[i])*i
+        sum = sum % tablesize
+        return sum
