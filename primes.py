@@ -10,8 +10,10 @@ def largest_prime(k: int) -> int:
 
     Complexity: O(n)
     """
-    prime = [True for i in range(0, k)]
-    prime[0] = False
+    # Create a list of all values from 0 to k
+    assert 0 < k < 100000
+    prime = [i for i in range(0, k)]
+    # Set 1 to False
     p = 2
     while p * p <= k - 1:
         if prime[p]:
@@ -19,10 +21,8 @@ def largest_prime(k: int) -> int:
                 prime[i] = False
         p += 1
 
-    # Finding last element in prime list that is True
-    for i in range(len(prime) - 1, 0, -1):
-        if prime[i]:
-            return i
+    # Finding and returning the last element in prime list that is not False
+    return list(filter(None, prime))[-1]
 
 
 if __name__ == "__main__":
