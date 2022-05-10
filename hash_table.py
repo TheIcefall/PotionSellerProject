@@ -10,6 +10,7 @@ __since__ = '14/05/2020'
 
 from referential_array import ArrayR
 from typing import TypeVar, Generic
+from potion import Potion
 T = TypeVar('T')
 
 
@@ -30,21 +31,33 @@ class LinearProbePotionTable(Generic[T]):
         self.conflict_count = 0
         self.probe_max = 0
         self.probe_total = 0
-        raise NotImplementedError()
+        self.count = 0
+        self.good_hash = good_hash
+
+        if tablesize_override == -1:
+            self.table_size = max_potions*2
+        else:
+            self.table_size = tablesize_override
+        self.table = ArrayR(self.table_size)
+
+
+
 
     def hash(self, potion_name: str) -> int:
-        """"""
-        raise NotImplementedError()
+        if self.good_hash == True:
+            return Potion.good_hash(potion_name, self.table_size)
+        elif self.good_hash == False:
+            return Potion.bad_hash(potion_name, self.table_size)
 
     def statistics(self) -> tuple:
-        """"""
-        raise NotImplementedError()
+        return (self.conflict_count,self.probe_total, self.probe_max)
 
     def __len__(self) -> int:
         """
         Returns number of elements in the hash table
         :complexity: O(1)
         """
+
         return self.count
 
     def __linear_probe(self, key: str, is_insert: bool) -> int:
@@ -57,10 +70,10 @@ class LinearProbePotionTable(Generic[T]):
         :raises KeyError: When a position can't be found
         """
         position = self.hash(key)  # get the position using hash
-
+        probe = 0
+        check = True
         if is_insert and self.is_full():
             raise KeyError(key)
-
         for _ in range(len(self.table)):  # start traversing
             if self.table[position] is None:  # found empty slot
                 if is_insert:
@@ -71,6 +84,15 @@ class LinearProbePotionTable(Generic[T]):
                 return position
             else:  # there is something but not the key, try next
                 position = (position + 1) % len(self.table)
+                probe += 1
+                self.probe_total += 1
+                if probe > self.probe_max:
+                    self.probe_max = probe
+            if check:
+                self.conflict_count += 1
+                check = False
+
+
 
         raise KeyError(key)
 
