@@ -19,7 +19,7 @@ class Potion:
         a = 1234
         for i in range(len(potion_name)):
             sum = (ord(potion_name[i]) + a*sum) % tablesize
-            a = 2*a + 3
+            a = (a*31) % (tablesize - 1)
         return sum
 
     @classmethod
