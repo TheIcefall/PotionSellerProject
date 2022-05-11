@@ -188,13 +188,21 @@ class BinarySearchTree(Generic[K, I]):
             It should be a child node having the smallest key among all the
             larger keys.
         """
-        raise NotImplementedError()
+        if current.right is None:
+            return None
+        current = current.right
+        while current.left is not None:
+            current = current.left
+        return current
+        
 
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
         """
-        raise NotImplementedError()
+        while current.left is not None:
+            current = current.left
+        return current
 
     def is_leaf(self, current: TreeNode) -> bool:
         """ Simple check whether or not the node is a leaf. """
