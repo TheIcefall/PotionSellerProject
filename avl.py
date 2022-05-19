@@ -60,6 +60,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             current.left = self.insert_aux(current.left, key, item)
         elif key > current.key:
             current.right = self.insert_aux(current.right, key, item)
+            current.right_nodes += 1
         else:  # key == current.key
             raise ValueError('Inserting duplicate item')
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
@@ -130,7 +131,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
         child.height = 1 + max(self.get_height(child.left), self.get_height(child.right))
-
+        current.right_nodes -= 1
         return child
 
 
@@ -161,6 +162,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
         child.height = 1 + max(self.get_height(child.left), self.get_height(child.right))
 
+        child.right_nodes += 1
         return child
 
     def rebalance(self, current: AVLTreeNode) -> AVLTreeNode:
@@ -187,8 +189,15 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    def kth_largest(self, k: int) -> AVLTreeNode:
+    def kth_largest(self, k: int, root: AVLTreeNode) -> AVLTreeNode:
         """
         Returns the kth largest element in the tree.
         k=1 would return the largest.
         """
+
+        if k == (root.right_nodes):
+            return root
+        if k < (root.right_nodes):
+            return self.kth_largest(k, root.right)
+        else:
+            return self.kth_largest(k - root.right_nodes ,root.left)
