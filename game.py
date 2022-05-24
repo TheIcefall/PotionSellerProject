@@ -43,21 +43,22 @@ class Game:
             potion_attributes.quantity += litres  # Update val (potion) litres accordingly
             self.vendor_inventory_tree[potion_attributes.buy_price] = potion_name_amount_pairs[
                 i]  # Set tree values in vendor inventory based on price
-
     def choose_potions_for_vendors(self, num_vendors: int) -> list:
         """
         Output: list of tuple(name of potion, how much potion)
         """
+        k = 10
         output = []
-        for i in range(num_vendors, 0, -1):
-            rand_int = self.random_generator.randint(i)
-            val = self.vendor_inventory_tree.kth_largest(rand_int)
-            if val == None:
-                k += 10
-                self.random_generator = RandomGen(k)
-                continue
+        checked = []
+        while len(checked) < num_vendors:
+            rand_int = self.random_generator.randint(num_vendors - len(checked))
+
+            if rand_int in checked:
+                while rand_int in checked:
+                    rand_int += 1
+            checked.append(rand_int)
+            val = self.vendor_inventory_tree.kth_largest(rand_int, self.vendor_inventory_tree.root)
             output.append(val.item)  # Take the potion that is i'th most expensive and update tree
-            del self.vendor_inventory_tree[val.key]  # Delete potion from tree
         return output
 
     def solve_game(self, potion_valuations: list[tuple[str, float]], starting_money: list[int]) -> list[float]:
