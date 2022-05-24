@@ -189,15 +189,29 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    def kth_largest(self, k: int, root: AVLTreeNode) -> AVLTreeNode:
-        """
-        Returns the kth largest element in the tree.
-        k=1 would return the largest.
-        """
+    def kth_largest(self, k, root):
+        current = root
+        largest = None
+        count =0
+        while (current != None):
+            if current.right == None:
 
-        if k == (root.right_nodes):
-            return root
-        if k < (root.right_nodes):
-            return self.kth_largest(k, root.right)
-        else:
-            return self.kth_largest(k - root.right_nodes ,root.left)
+                count += 1
+                if count == k:
+                    largest = current
+                current = current.left
+            else:
+                succ = current.right
+
+                while (succ.left != None and succ.left != current):
+                    succ = succ.left
+                if succ.left == None:
+                    succ.left = current
+                    current = current.right
+                else:
+                    succ.left = None
+                    count += 1
+                    if count == k:
+                        largest = current
+                    current = current.left
+        return largest
