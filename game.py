@@ -52,8 +52,12 @@ class Game:
         for i in range(num_vendors, 0, -1):
             rand_int = self.random_generator.randint(i)
             val = self.vendor_inventory_tree.kth_largest(rand_int)
+            if val == None:
+                k += 10
+                self.random_generator = RandomGen(k)
+                continue
             output.append(val.item)  # Take the potion that is i'th most expensive and update tree
-            self.vendor_inventory_tree.delete_aux(self.vendor_inventory_tree.root, val.key)  # Delete potion from tree
+            del self.vendor_inventory_tree[val.key]  # Delete potion from tree
         return output
 
     def solve_game(self, potion_valuations: list[tuple[str, float]], starting_money: list[int]) -> list[float]:
