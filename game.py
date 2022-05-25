@@ -4,7 +4,7 @@ from avl import AVLTree
 from hash_table import LinearProbePotionTable
 from potion import Potion
 from random_gen import RandomGen
-
+from bst import BSTInOrderIterator
 
 class Game:
 
@@ -15,6 +15,8 @@ class Game:
         self.potions_tree = AVLTree()
         self.vendor_inventory_tree = AVLTree()
         self.random_generator = RandomGen()
+        self.vendor_hash = None
+
 
     def set_total_potion_data(self, potion_data: list) -> None:
         """
@@ -29,7 +31,8 @@ class Game:
                 2]  # Prepare to create empty potions
             data = Potion.create_empty(potion_type, key, price)  # Data = (Empty class of potion)
             self.potions_tree[price] = data  # Add empty potions to AVLTree based on price
-            self.potions_hash.insert(key, data)  # Hash potions to hash table
+            self.potions_hash.insert(key,data) # Hash potions to hash table
+
 
     def add_potions_to_inventory(self, potion_name_amount_pairs: list[tuple[str, float]]) -> None:
         """
@@ -41,14 +44,15 @@ class Game:
             potion_attributes = self.potions_hash[key]  # Find details about potion via key we are given
             litres = potion_name_amount_pairs[i][1]
             potion_attributes.quantity += litres  # Update val (potion) litres accordingly
-            self.vendor_inventory_tree[potion_attributes.buy_price] = potion_name_amount_pairs[
-                i]  # Set tree values in vendor inventory based on price
+            self.vendor_inventory_tree[potion_attributes.buy_price] = potion_name_amount_pairs[i]  # Set tree values in vendor inventory based on price
+
     def choose_potions_for_vendors(self, num_vendors: int) -> list:
         """
         Output: list of tuple(name of potion, how much potion)
         """
         k = 10
-        output = []
+        self.vendor = []
+        self.vendor_hash = LinearProbePotionTable(num_vendors)
         checked = []
         while len(checked) < num_vendors:
             rand_int = self.random_generator.randint(num_vendors - len(checked))
@@ -58,29 +62,46 @@ class Game:
                     rand_int += 1
             checked.append(rand_int)
             val = self.vendor_inventory_tree.kth_largest(rand_int, self.vendor_inventory_tree.root)
-            output.append(val.item)  # Take the potion that is i'th most expensive and update tree
-        return output
+            print(val)
+            self.vendor.append(val.item)  # Take the potion that is i'th most expensive and update tree
+            self.vendor_hash.insert(val.item[0], val.item[1])
+        return self.vendor
 
     def solve_game(self, potion_valuations: list[tuple[str, float]], starting_money: list[int]) -> list[float]:
-        raise NotImplementedError()
+        arbit = AVLTree()
+        potion_val_hash = LinearProbePotionTable(len(potion_valuations))
+        sorted = []
+        for i in range(len(potion_valuations)):
+            data = self.potions_hash[potion_valuations[i][0]]
+            sell_price = data.buy_price
+            price_dif = potion_valuations[i][1] - sell_price
+            potion_val_hash[potion_valuations[i][0]] = potion_valuations[i][1]
+            if price_dif in arbit:
+                arbit[price_dif].append(potion_valuations[i][0])
+                continue
+            arbit[price_dif] = [potion_valuations[i][0]]
 
-    if __name__ == "__main__":
-        g = Game()
-        g.set_total_potion_data([["Potion of Health Regeneration", "Health", 20],
-                                 ["Potion of Extreme Speed", "Buff", 10],
-                                 ["Potion of Deadly Poison", "Damage", 45],
-                                 ["Potion of Instant Health", "Health", 5],
-                                 ["Potion of Increased Stamina", "Buff", 25],
-                                 ["Potion of Untenable Odour", "Damage", 1]])
-        # print(g.potions_hash)
-        # print(g.potions_tree)
-
-        g.add_potions_to_inventory([("Potion of Health Regeneration", 4),
-                                    ("Potion of Extreme Speed", 5),
-                                    ("Potion of Instant Health", 3),
-                                    ("Potion of Increased Stamina", 10),
-                                    ("Potion of Untenable Odour", 5)])
-
-        print(g.vendor_inventory_tree[5])
-
-        # selling = g.choose_potions_for_vendors(5)
+        it = BSTInOrderIterator(arbit.root)
+        for j in range(len(arbit)):
+            key = it.__next__()
+            item = arbit[key]
+            if len(item) > 1:
+                for i in range(len(item)):
+                    sorted.append((item[i], key))
+            else:
+                sorted.append((item[0], key))
+        result = []
+        for k in range(len(starting_money)):
+            money = starting_money[k]
+            profit = 0
+            curr = 1
+            while money > 0:
+                if money >= self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[sorted[len(sorted) - curr][0]]:
+                    money -= self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[sorted[len(sorted) - curr][0]]
+                    profit += self.vendor_hash[sorted[len(sorted) - curr][0]] * potion_val_hash[sorted[(len(sorted)) - curr][0]]
+                elif money < self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[sorted[len(sorted) - curr][0]]:
+                    profit += (money/self.potions_hash[sorted[len(sorted) - curr][0]].buy_price) * potion_val_hash[sorted[len(sorted) - curr][0]]
+                    money = 0
+                curr += 1
+            result.append(profit)
+        return result
