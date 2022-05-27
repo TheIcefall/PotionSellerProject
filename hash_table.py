@@ -11,6 +11,7 @@ __since__ = '14/05/2020'
 from referential_array import ArrayR
 from typing import TypeVar, Generic
 from potion import Potion
+
 T = TypeVar('T')
 
 
@@ -24,9 +25,12 @@ class LinearProbePotionTable(Generic[T]):
         count: number of elements in the hash table
         table: used to represent our internal array
         table_size: current size of the hash table
+        probe_max: The maximum linear probe chain length of all inserted items in the linear probe potion table
+        conflict_count: The amount of conflicts that occur when inserting items into table
+        good_hash: Boolean value == True if good_hash function will be used, otherwise False.
     """
 
-    def __init__(self, max_potions: int, good_hash: bool=True, tablesize_override: int=-1) -> None:
+    def __init__(self, max_potions: int, good_hash: bool = True, tablesize_override: int = -1) -> None:
         # Statistic setting
         self.conflict_count = 0
         self.probe_max = 0
@@ -35,22 +39,34 @@ class LinearProbePotionTable(Generic[T]):
         self.good_hash = good_hash
 
         if tablesize_override == -1:
-            self.table_size = max_potions*2
+            self.table_size = max_potions * 2  # If user does not input a table size, select appropriate table size given number of max_potions
         else:
             self.table_size = tablesize_override
         self.table = ArrayR(self.table_size)
 
-
-
-
     def hash(self, potion_name: str) -> int:
-        if self.good_hash == True:
+        """
+        This function hashes a value for potion_name,
+            using Potion.good_hash is the user set good_hash to True
+            upon initialisation of object, otherwise using Potion.bad_hash.
+
+        Time complexity (Best and worst): O(potion_name)
+        """
+        if self.good_hash:
             return Potion.good_hash(potion_name, self.table_size)
-        elif self.good_hash == False:
+        elif self.good_hash is False:
             return Potion.bad_hash(potion_name, self.table_size)
 
     def statistics(self) -> tuple:
-        return (self.conflict_count,self.probe_total, self.probe_max)
+        """
+        This function returns the statistics on linear probing in the potion table.
+            It gives us the amount of conflicts, total linear probe length, and the
+            longest linear probing instance. This gives us information on the effectiveness
+            of the hash function used.
+
+        Time complexity: O(1)
+        """
+        return self.conflict_count, self.probe_total, self.probe_max
 
     def __len__(self) -> int:
         """
@@ -91,8 +107,6 @@ class LinearProbePotionTable(Generic[T]):
             if check:
                 self.conflict_count += 1
                 check = False
-
-
 
         raise KeyError(key)
 

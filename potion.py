@@ -2,6 +2,15 @@ from primes import largest_prime
 
 
 class Potion:
+    """
+    Potion
+
+    attributes:
+        potion_type: Type of potion object will be
+        name: Name of potion
+        buy_price: Buy price of potion
+        quantity: Quantity of potion object will hold
+    """
     
     def __init__(self, potion_type: str, name: str, buy_price: float, quantity: float) -> None:
         self.potion_type = potion_type
