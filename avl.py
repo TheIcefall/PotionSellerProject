@@ -49,9 +49,11 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
     def insert_aux(self, current: AVLTreeNode, key: K, item: I) -> AVLTreeNode:
         """
             Attempts to insert an item into the tree, it uses the Key to insert
-            it. After insertion, performs sub-tree rotation whenever it becomes
-            unbalanced.
-            returns the new root of the subtree.
+            it. After insertion, it rebalances the sub-tree, rotating whenever needed.
+            Returns the new root of the subtree.
+
+            Complexity: Worst case O(log(n)), best case O(1)
+
         """
         if current is None:  # base case: at the leaf
             current = AVLTreeNode(key, item)
@@ -69,9 +71,10 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
     def delete_aux(self, current: AVLTreeNode, key: K) -> AVLTreeNode:
         """
             Attempts to delete an item from the tree, it uses the Key to
-            determine the node to delete. After deletion,
-            performs sub-tree rotation whenever it becomes unbalanced.
-            returns the new root of the subtree.
+            determine the node to delete. After deletion, it rebalances the subtree.
+            Rotating when needed.
+
+            Complexity: Worst case O(log(n)), best case O(1)
         """
         if current is None:  # key not found
             raise ValueError('Deleting non-existent item')
@@ -178,7 +181,17 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    def kth_largest_aux(self, k: int, current: AVLTreeNode):
+    def kth_largest_aux(self, k: int, current: AVLTreeNode) -> AVLTreeNode:
+        """
+        Auxillary function to kth largest.
+
+        This function returns the node of the k'th largest key in the subtree.
+        :param k: The key we are looking for is the k'th largest
+        :param current: The root node of the subtree
+        :return: Returns the kth largest node in subtree of initial input
+
+        Complexity: Worst case O(n), best case O(1)
+        """
         largest = None
         count = 0
         while current is not None:
@@ -205,5 +218,12 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         return largest
 
     def kth_largest(self, k):
+        """
+        Function which calls auxillary function, which returns the node of the k'th largest key in tree.
+        :param k: The key we are looking for is the k'th largest
+        :return: The node of the k'th largest key.
+
+        Complexity: O(n)
+        """
         current = self.root
         return self.kth_largest_aux(k, current)

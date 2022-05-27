@@ -8,7 +8,7 @@ def largest_prime(k: int) -> int:
     Input K: Integer
     Output: Closest prime number smaller than k.
 
-    Time Complexity (Best and worst): O(n)
+    Time Complexity (Best and worst): O(n) where n is input k
 
     """
     assert 0 < k < 100000
