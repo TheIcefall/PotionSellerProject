@@ -12,12 +12,23 @@ class Potion:
 
     @classmethod
     def create_empty(cls, potion_type: str, name: str, buy_price: float) -> 'Potion':
+        """
+        This method creates an empty potion given 3 values: potion type, name, and buy price.
+
+        Time Complexity (Best and worst): O(1)
+        """
         return cls(potion_type, name, buy_price, 0)
 
 
     @classmethod
     def good_hash(cls, potion_name: str = "", tablesize: int = 1) -> int:
-        """"""
+        """
+        This method hashes a value, given a key to hash the value for, and a tablesize.
+        This hash function attempts to give a unique value for each unique hash key given the table is not full,
+            and does it's best to avoid collisions and conflicts.
+
+        Time Complexity (Best and worst): O(potion_name)
+        """
         value = 0
         a = largest_prime(10000)
         b = largest_prime(8000)
@@ -28,7 +39,13 @@ class Potion:
 
     @classmethod
     def bad_hash(cls, potion_name: str, tablesize: int) -> int:
-        """"""
+        """
+        This method hashes a value, given a key to hash the value for, and a tablesize.
+
+        This function does a poor job of producing unique hash values for each given key for the tablesize.
+
+        Time complexity (Best and worst): O(potion_name)
+        """
         value = 0
 
         for i in range(len(potion_name)):
