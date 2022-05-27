@@ -66,9 +66,6 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
         return self.rebalance(current)
 
-
-
-
     def delete_aux(self, current: AVLTreeNode, key: K) -> AVLTreeNode:
         """
             Attempts to delete an item from the tree, it uses the Key to
@@ -95,17 +92,11 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
             # general case => find a successor
             succ = self.get_successor(current)
-            current.key  = succ.key
+            current.key = succ.key
             current.item = succ.item
             current.right = self.delete_aux(current.right, succ.key)
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
         return self.rebalance(current)
-
-
-
-
-
-
 
     def left_rotate(self, current: AVLTreeNode) -> AVLTreeNode:
         """
@@ -133,8 +124,6 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         child.height = 1 + max(self.get_height(child.left), self.get_height(child.right))
         current.right_nodes -= 1
         return child
-
-
 
     def right_rotate(self, current: AVLTreeNode) -> AVLTreeNode:
         """
@@ -189,12 +178,11 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    def kth_largest(self, k, root):
-        current = root
+    def kth_largest_aux(self, k: int, current: AVLTreeNode):
         largest = None
-        count =0
-        while (current != None):
-            if current.right == None:
+        count = 0
+        while current is not None:
+            if current.right is None:
 
                 count += 1
                 if count == k:
@@ -203,9 +191,9 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             else:
                 succ = current.right
 
-                while (succ.left != None and succ.left != current):
+                while succ.left is not None and succ.left != current:
                     succ = succ.left
-                if succ.left == None:
+                if succ.left is None:
                     succ.left = current
                     current = current.right
                 else:
@@ -215,3 +203,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
                         largest = current
                     current = current.left
         return largest
+
+    def kth_largest(self, k):
+        current = self.root
+        return self.kth_largest_aux(k, current)
