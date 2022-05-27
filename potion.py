@@ -1,3 +1,6 @@
+from primes import largest_prime
+
+
 class Potion:
     
     def __init__(self, potion_type: str, name: str, buy_price: float, quantity: float) -> None:
@@ -15,19 +18,19 @@ class Potion:
     @classmethod
     def good_hash(cls, potion_name: str = "", tablesize: int = 1) -> int:
         """"""
-        sum = 0
-        a = 1234
+        value = 0
+        a = largest_prime(10000)
+        b = largest_prime(8000)
         for i in range(len(potion_name)):
-            sum = (ord(potion_name[i]) + a*sum) % tablesize
-            a = (a*31) % (tablesize - 1)
-        return sum
+            value = (ord(potion_name[i]) + a * value) % tablesize
+            a = (a * b) % (tablesize - 1)
+        return value
 
     @classmethod
     def bad_hash(cls, potion_name: str, tablesize: int) -> int:
         """"""
-        sum = 0
+        value = 0
 
         for i in range(len(potion_name)):
-            sum += ord(potion_name[i])*i
-        sum = sum % tablesize
-        return sum
+            value += (ord(potion_name[i])*i) % tablesize
+        return value

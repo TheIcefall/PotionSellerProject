@@ -2,8 +2,9 @@ import unittest
 
 from game import Game
 
+
 class TestGame(unittest.TestCase):
-    
+
     def test_choose_vendors(self):
         # Potion names are just numbers here to ensure uniqueness
         g = Game()
@@ -46,7 +47,7 @@ class TestGame(unittest.TestCase):
             ("Potion of Increased Stamina", 10),
             ("Potion of Untenable Odour", 5),
         ])
-        
+
         full_vendor_info = [
             ("Potion of Health Regeneration", 30),
             ("Potion of Extreme Speed", 15),
@@ -57,6 +58,7 @@ class TestGame(unittest.TestCase):
         # Play the game with 3 attempts, at different starting money.
         results = G.solve_game(full_vendor_info, [12.5, 45, 80])
         self.assertEqual(results, [37.5, 90, 142.5])
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestGame)

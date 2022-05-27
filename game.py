@@ -61,7 +61,7 @@ class Game:
                 while rand_int in checked:
                     rand_int += 1
             checked.append(rand_int)
-            val = self.vendor_inventory_tree.kth_largest(rand_int, self.vendor_inventory_tree.root)
+            val = self.vendor_inventory_tree.kth_largest(rand_int)
             print(val)
             self.vendor.append(val.item)  # Take the potion that is i'th most expensive and update tree
             self.vendor_hash.insert(val.item[0], val.item[1])
