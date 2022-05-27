@@ -6,17 +6,29 @@ from potion import Potion
 from random_gen import RandomGen
 from bst import BSTInOrderIterator
 
+
 class Game:
+    """
+    This class plays the game for us!
+
+    rand:
+    potions_hash: This is a hash table where all potions available in game are stored for quick retrieval to look at details
+    vendor_inventory_hash: This is a hash table where all potions available in vendor inventory are stored for quick retrieval to look at details
+    vendor_inventory_tree: This is where all potions in vendor inventory all stored in a tree, based on buy price.
+    random_generator: This is a generator object that will generate random numbers
+    vendor_hash: This is a hash table where ______________
+    """
 
     def __init__(self, seed=0) -> None:
+        """
+        Initialisation
+        """
         self.rand = RandomGen(seed=seed)
         self.potions_hash = None
         self.vendor_inventory_hash = None
-        self.potions_tree = AVLTree()
         self.vendor_inventory_tree = AVLTree()
         self.random_generator = RandomGen()
         self.vendor_hash = None
-
 
     def set_total_potion_data(self, potion_data: list) -> None:
         """
@@ -30,9 +42,7 @@ class Game:
             key, potion_type, price = potion_data[i][0], potion_data[i][1], potion_data[i][
                 2]  # Prepare to create empty potions
             data = Potion.create_empty(potion_type, key, price)  # Data = (Empty class of potion)
-            self.potions_tree[price] = data  # Add empty potions to AVLTree based on price
-            self.potions_hash.insert(key,data) # Hash potions to hash table
-
+            self.potions_hash.insert(key, data)  # Hash potions to hash table
 
     def add_potions_to_inventory(self, potion_name_amount_pairs: list[tuple[str, float]]) -> None:
         """
@@ -44,14 +54,15 @@ class Game:
             potion_attributes = self.potions_hash[key]  # Find details about potion via key we are given
             litres = potion_name_amount_pairs[i][1]
             potion_attributes.quantity += litres  # Update val (potion) litres accordingly
-            self.vendor_inventory_tree[potion_attributes.buy_price] = potion_name_amount_pairs[i]  # Set tree values in vendor inventory based on price
+            self.vendor_inventory_tree[potion_attributes.buy_price] = potion_name_amount_pairs[
+                i]  # Set tree values in vendor inventory based on price
 
     def choose_potions_for_vendors(self, num_vendors: int) -> list:
         """
         Output: list of tuple(name of potion, how much potion)
         """
         k = 10
-        self.vendor = []
+        vendor = []
         self.vendor_hash = LinearProbePotionTable(num_vendors)
         checked = []
         while len(checked) < num_vendors:
@@ -63,9 +74,9 @@ class Game:
             checked.append(rand_int)
             val = self.vendor_inventory_tree.kth_largest(rand_int)
             print(val)
-            self.vendor.append(val.item)  # Take the potion that is i'th most expensive and update tree
+            vendor.append(val.item)  # Take the potion that is i'th most expensive and update tree
             self.vendor_hash.insert(val.item[0], val.item[1])
-        return self.vendor
+        return vendor
 
     def solve_game(self, potion_valuations: list[tuple[str, float]], starting_money: list[int]) -> list[float]:
         arbit = AVLTree()
@@ -96,11 +107,16 @@ class Game:
             profit = 0
             curr = 1
             while money > 0:
-                if money >= self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[sorted[len(sorted) - curr][0]]:
-                    money -= self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[sorted[len(sorted) - curr][0]]
-                    profit += self.vendor_hash[sorted[len(sorted) - curr][0]] * potion_val_hash[sorted[(len(sorted)) - curr][0]]
-                elif money < self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[sorted[len(sorted) - curr][0]]:
-                    profit += (money/self.potions_hash[sorted[len(sorted) - curr][0]].buy_price) * potion_val_hash[sorted[len(sorted) - curr][0]]
+                if money >= self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[
+                    sorted[len(sorted) - curr][0]]:
+                    money -= self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[
+                        sorted[len(sorted) - curr][0]]
+                    profit += self.vendor_hash[sorted[len(sorted) - curr][0]] * potion_val_hash[
+                        sorted[(len(sorted)) - curr][0]]
+                elif money < self.potions_hash[sorted[len(sorted) - curr][0]].buy_price * self.vendor_hash[
+                    sorted[len(sorted) - curr][0]]:
+                    profit += (money / self.potions_hash[sorted[len(sorted) - curr][0]].buy_price) * potion_val_hash[
+                        sorted[len(sorted) - curr][0]]
                     money = 0
                 curr += 1
             result.append(profit)
