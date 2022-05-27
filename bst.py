@@ -187,6 +187,8 @@ class BinarySearchTree(Generic[K, I]):
             Get successor of the current node.
             It should be a child node having the smallest key among all the
             larger keys.
+
+            Complexity: Best case O(1), Worst case O(n)
         """
         if current.right is None:
             return None
@@ -199,6 +201,8 @@ class BinarySearchTree(Generic[K, I]):
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
+
+            Complexity: Best case O(1), Worst case O(n)
         """
         while current.left is not None:
             current = current.left
