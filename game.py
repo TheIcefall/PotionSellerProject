@@ -27,12 +27,11 @@ class Game:
         self.vendor_company_tree = AVLTree()
         self.vendor_company_hash = None
 
-
     def set_total_potion_data(self, potion_data: list) -> None:
         """
         This sets the total potion data for the game, including price.
 
-        Complexity: O(len(potion_data))
+        Complexity: O(N), where N is length potion_data
         """
         # Need to set vendors potions to all in potion_data, at 0 litres
         self.potions_hash = LinearProbePotionTable(len(potion_data), True, -1)
@@ -45,7 +44,7 @@ class Game:
     def add_potions_to_inventory(self, potion_name_amount_pairs: list[tuple[str, float]]) -> None:
         """
         input: [potion name, amount]
-        Complexity: O(C * log(n))
+        Complexity: O(C * log(N)), where C is equal to length of potion_name_amount_pairs, and N is number of potions provided in set_total_potion_data.
         """
         self.vendor_company_hash = LinearProbePotionTable(
             len(potion_name_amount_pairs))  # Initialise hash table for vendors
@@ -56,7 +55,8 @@ class Game:
             potion_attributes.quantity += litres  # Update val (potion) litres accordingly
             self.vendor_company_tree[potion_attributes.buy_price] = potion_name_amount_pairs[
                 i]  # Set tree values in vendor inventory based on price
-            self.vendor_company_hash[key] = potion_attributes  # Add items to hash table for vendors, include litres of potion
+            self.vendor_company_hash[
+                key] = potion_attributes  # Add items to hash table for vendors, include litres of potion
 
     def choose_potions_for_vendors(self, num_vendors: int) -> list:
         """
@@ -66,7 +66,7 @@ class Game:
 
         Output: list of tuple(name of potion, how much potion)
 
-        Complexity: O(c * log(n))
+        Complexity: O(C * log(N)) Where C is equal to num_vendors, and N is number of potions provided in set_total_potion_data.
         """
         output = []  # Initialise empty list to fill with potion names and values
         if num_vendors < 1:
@@ -84,6 +84,17 @@ class Game:
         return output
 
     def solve_game(self, potion_valuations: list[tuple[str, float]], starting_money: list[int]) -> list[float]:
+        """
+
+        Args:
+            potion_valuations: This is a list that shows the name of the potion, and how much the adventurers are willing to purchase for
+            starting_money: This shows the players amount of money per day
+
+        Returns: A list of the players total money at the end of each day played, indexed by day.
+
+        Complexity: O(N*M + N*log(N)) Where N is length of potion_valuations, and M is the length of starting_money.
+
+        """
         profit_tree = AVLTree()
 
         # This section is O(n*log(n))
@@ -97,7 +108,7 @@ class Game:
             if sell_price_vendor < adventurer_buy_price:
                 vendor_quantity = self.vendor_company_hash[key].quantity
                 profit_factor = (
-                            adventurer_buy_price / sell_price_vendor)  # Gives percentage of returns (gross profit) that will be made per unit purchased
+                        adventurer_buy_price / sell_price_vendor)  # Gives percentage of returns (gross profit) that will be made per unit purchased
                 amount_purchasable = vendor_quantity * sell_price_vendor
                 profit_tree[profit_factor, key] = [amount_purchasable, profit_factor, key]
 
