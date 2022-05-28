@@ -46,6 +46,9 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             return 0
         return self.get_height(current.right) - self.get_height(current.left)
 
+    def __setitem__(self, key: K, item: I) -> None:
+        self.root = self.insert_aux(self.root, key, item)
+
     def insert_aux(self, current: AVLTreeNode, key: K, item: I) -> AVLTreeNode:
         """
             Attempts to insert an item into the tree, it uses the Key to insert
@@ -67,6 +70,9 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             raise ValueError('Inserting duplicate item')
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
         return self.rebalance(current)
+
+    def __delitem__(self, key: K) -> None:
+        self.root = self.delete_aux(self.root, key)
 
     def delete_aux(self, current: AVLTreeNode, key: K) -> AVLTreeNode:
         """
@@ -192,11 +198,10 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         Complexity: Worst case O(n), best case O(1)
         """
-        largest = None
+        largest = current
         count = 0
         while current is not None:
             if current.right is None:
-
                 count += 1
                 if count == k:
                     largest = current
