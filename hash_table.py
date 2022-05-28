@@ -3,7 +3,7 @@
 Defines a Hash Table using Linear Probing for conflict resolution.
 It currently rehashes the primary cluster to handle deletion.
 """
-__author__ = 'Brendon Taylor, modified by Jackson Goerner'
+__author__ = 'Brendon Taylor, modified by Jackson Goerner, modified again by Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh '
 __docformat__ = 'reStructuredText'
 __modified__ = '21/05/2020'
 __since__ = '14/05/2020'

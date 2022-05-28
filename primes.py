@@ -1,3 +1,7 @@
+"""
+Author: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+"""
+
 def largest_prime(k: int) -> int:
     """
     Start off with list of len(k), filled with True. Then turn each True

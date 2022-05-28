@@ -6,7 +6,7 @@ I = TypeVar('I')
 K = TypeVar('K')
 T = TypeVar('T')
 
-__author__ = 'Maria Garcia de la Banda and Brendon Taylor. Modified by Alexey Ignatiev'
+__author__ = 'Maria Garcia de la Banda and Brendon Taylor. Modified by Alexey Ignatiev, modified by Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh'
 __docformat__ = 'reStructuredText'
 
 

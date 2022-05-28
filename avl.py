@@ -1,6 +1,6 @@
 """ AVL Tree implemented on top of the standard BST. """
 
-__author__ = 'Alexey Ignatiev'
+__author__ = 'Alexey Ignatiev. Modified by Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh'
 __docformat__ = 'reStructuredText'
 
 from bst import BinarySearchTree

@@ -1,3 +1,7 @@
+"""
+Author: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+"""
+
 from typing import Generator
 
 
@@ -11,6 +15,8 @@ def lcg(modulus: int, a: int, c: int, seed: int) -> Generator[int, None, None]:
 def check_nums(lst: list, index: int) -> bool:
     """
     This function returns a boolean expression that tells us if in list of objects, at least three of the objects have a 1, in index position 'index'.
+
+    Complexity: O(1)
     """
     how_many_ones = 0
     for i in range(5):  # Iterate 5 times == length list

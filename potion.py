@@ -1,3 +1,7 @@
+"""
+Author: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+"""
+
 from primes import largest_prime
 
 

@@ -1,3 +1,7 @@
+"""
+Authors: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+"""
+
 from __future__ import annotations
 # ^ In case you aren't on Python 3.10
 from avl import AVLTree
