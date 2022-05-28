@@ -23,6 +23,3 @@ def largest_prime(k: int) -> int:
     # Finding and returning the last element in prime list that is not False
     return list(filter(None, prime))[-1]
 
-
-if __name__ == "__main__":
-    print(largest_prime(100))

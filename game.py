@@ -27,9 +27,6 @@ class Game:
         self.vendor_company_tree = AVLTree()
         self.vendor_company_hash = None
 
-        # New
-        self.vendor_inventory_hash = None
-        self.vendor_inventory_tree = None
 
     def set_total_potion_data(self, potion_data: list) -> None:
         """
@@ -59,8 +56,7 @@ class Game:
             potion_attributes.quantity += litres  # Update val (potion) litres accordingly
             self.vendor_company_tree[potion_attributes.buy_price] = potion_name_amount_pairs[
                 i]  # Set tree values in vendor inventory based on price
-            self.vendor_company_hash[
-                key] = potion_attributes  # Add items to hash table for vendors, include litres of potion
+            self.vendor_company_hash[key] = potion_attributes  # Add items to hash table for vendors, include litres of potion
 
     def choose_potions_for_vendors(self, num_vendors: int) -> list:
         """
@@ -72,7 +68,7 @@ class Game:
 
         Complexity: O(c * log(n))
         """
-        output = [] # Initialise empty list to fill with potion names and values
+        output = []  # Initialise empty list to fill with potion names and values
         if num_vendors < 1:
             raise ValueError
         rand_gen = RandomGen()
@@ -100,7 +96,8 @@ class Game:
             # Finding profit factor and storing in tree if it is profitable
             if sell_price_vendor < adventurer_buy_price:
                 vendor_quantity = self.vendor_company_hash[key].quantity
-                profit_factor = (adventurer_buy_price / sell_price_vendor)  # Gives percentage of returns (gross profit) that will be made per unit purchased
+                profit_factor = (
+                            adventurer_buy_price / sell_price_vendor)  # Gives percentage of returns (gross profit) that will be made per unit purchased
                 amount_purchasable = vendor_quantity * sell_price_vendor
                 profit_tree[profit_factor, key] = [amount_purchasable, profit_factor, key]
 
@@ -111,7 +108,6 @@ class Game:
             kth_largest = profit_tree.kth_largest(i + 1)
             sorted_list_of_potions.append(kth_largest.item)
 
-
         # Here is where we solve the puzzle, and find out how much money can be made
         # This section is O(n x m) complexity
         profit_output = []
@@ -121,56 +117,17 @@ class Game:
             for j in range(len(sorted_list_of_potions)):
                 if money_for_day == 0:
                     break
-                if sorted_list_of_potions[j][0] > money_for_day:   # If there is more than I'm able to purchase
-                    profit_for_day += money_for_day * sorted_list_of_potions[j][1]   # Return amount I'm able to purchase times profit factor
+                if sorted_list_of_potions[j][0] > money_for_day:  # If there is more than I'm able to purchase
+                    profit_for_day += money_for_day * sorted_list_of_potions[j][
+                        1]  # Return amount I'm able to purchase times profit factor
                     break
-                else:   # If I can purchase all there is and still have leftover money
-                    profit_for_day += sorted_list_of_potions[j][0] * sorted_list_of_potions[j][1]  # Return amount available for purchase times profit factor
+                else:  # If I can purchase all there is and still have leftover money
+                    profit_for_day += sorted_list_of_potions[j][0] * sorted_list_of_potions[j][
+                        1]  # Return amount available for purchase times profit factor
                     money_for_day -= sorted_list_of_potions[j][0]
 
-
-            print("Finshed", profit_for_day)
-
+            # Append profit made for day to output list
             profit_output.append(profit_for_day)
             profit_for_day = 0
 
         return profit_output
-
-
-
-
-
-if __name__ == "__main__":
-    G = Game()
-    # There are these potions, with these stats, available over the course of the game.
-    G.set_total_potion_data([
-        # Name, Category, Buying price from vendors.
-        ["Potion of Health Regeneration", "Health", 20],
-        ["Potion of Extreme Speed", "Buff", 10],
-        ["Potion of Deadly Poison", "Damage", 45],
-        ["Potion of Instant Health", "Health", 5],
-        ["Potion of Increased Stamina", "Buff", 25],
-        ["Potion of Untenable Odour", "Damage", 1],
-    ])
-
-    # Start of Day 1
-    # Let’s begin by adding to the inventory of PotionCorp this shows the amount of litres:
-    G.add_potions_to_inventory([
-        ("Potion of Health Regeneration", 4),
-        ("Potion of Extreme Speed", 5),
-        ("Potion of Instant Health", 3),
-        ("Potion of Increased Stamina", 10),
-        ("Potion of Untenable Odour", 5),
-    ])
-
-    full_vendor_info = [
-        ("Potion of Health Regeneration", 30),
-        ("Potion of Extreme Speed", 15),
-        ("Potion of Instant Health", 15),
-        ("Potion of Increased Stamina", 20),
-    ]
-
-    # Play the game with 3 attempts, at different starting money.
-    results = G.solve_game(full_vendor_info, [12.5, 45, 80])
-
-    print(results)

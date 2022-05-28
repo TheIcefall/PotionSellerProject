@@ -61,13 +61,3 @@ class RandomGen:
         return int(output_binary, 2) % k + 1
 
 
-if __name__ == "__main__":
-    r = RandomGen()
-    print(r.randint(50))
-    print(r.randint(50))
-    print(r.randint(50))
-    print(r.randint(50))
-    print(r.randint(50))
-    print(r.randint(50))
-    print(r.randint(50))
-

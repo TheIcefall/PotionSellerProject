@@ -131,7 +131,9 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         current.height = 1 + max(self.get_height(current.right), self.get_height(current.left))
         child.height = 1 + max(self.get_height(child.left), self.get_height(child.right))
+
         current.right_nodes -= 1
+
         return child
 
     def right_rotate(self, current: AVLTreeNode) -> AVLTreeNode:
@@ -187,7 +189,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    def kth_largest_aux(self, k: int, current: AVLTreeNode) -> AVLTreeNode:
+    def kth_largest_aux(self, k: int, root: AVLTreeNode) -> AVLTreeNode:
         """
         Auxillary function to kth largest.
 
@@ -196,31 +198,22 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         :param current: The root node of the subtree
         :return: Returns the kth largest node in subtree of initial input
 
-        Complexity: Worst case O(n), best case O(1)
+        Complexity: Worst case O(log(n)), best case O(1)
         """
-        largest = current
-        count = 0
-        while current is not None:
-            if current.right is None:
-                count += 1
-                if count == k:
-                    largest = current
-                current = current.left
+        if k == root.right_nodes:
+            return root
+        if k < root.right_nodes:
+            if root.right:
+                return self.kth_largest_aux(k, root.right)
+            elif root.left:
+                return self.kth_largest_aux(k, root.left)
             else:
-                succ = current.right
-
-                while succ.left is not None and succ.left != current:
-                    succ = succ.left
-                if succ.left is None:
-                    succ.left = current
-                    current = current.right
-                else:
-                    succ.left = None
-                    count += 1
-                    if count == k:
-                        largest = current
-                    current = current.left
-        return largest
+                return root
+        else:
+            if root.left:
+                return self.kth_largest_aux(k - root.right_nodes, root.left)
+            else:
+                return root
 
     def kth_largest(self, k):
         """
@@ -232,3 +225,8 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         """
         current = self.root
         return self.kth_largest_aux(k, current)
+
+
+if __name__ == "__main__":
+    pass
+
