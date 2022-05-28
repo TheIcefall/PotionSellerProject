@@ -222,6 +222,14 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         :return: The node of the k'th largest key.
 
         Complexity: Worst O(log(n)), best O(1) where n is the amount of nodes on AVLTree
+
+        Complexity analysis:
+            Why it is the complexity it is: It is O(log(n)) as it uses recursion to find the k'th element.
+            To do this we have added an attribute to every AVLTreeNode, being right_nodes. right_nodes
+            gives us the amount of nodes that are in the subtree to the right of the given node.
+            This way we can exploit the balanced aspect of an AVL tree, and find the kth element through
+            dividing and conquering the tree. We compare the amount of nodes on either side of a node,
+            to determine which path to take.
         """
         current = self.root
         return self.kth_largest_aux(k, current)
