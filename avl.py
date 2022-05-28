@@ -198,7 +198,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         :param current: The root node of the subtree
         :return: Returns the kth largest node in subtree of initial input
 
-        Complexity: Worst case O(log(n)), best case O(1)
+        Complexity: Worst O(log(n)), best O(1) where n is the amount of nodes on AVLTree
         """
         if k == root.right_nodes:
             return root
@@ -221,12 +221,9 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         :param k: The key we are looking for is the k'th largest
         :return: The node of the k'th largest key.
 
-        Complexity: O(n)
+        Complexity: Worst O(log(n)), best O(1) where n is the amount of nodes on AVLTree
         """
         current = self.root
         return self.kth_largest_aux(k, current)
 
-
-if __name__ == "__main__":
-    pass
 
