@@ -1,5 +1,7 @@
 """
 Author: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+
+This file allows us to create potion objects, to later use in game.py
 """
 
 from primes import largest_prime

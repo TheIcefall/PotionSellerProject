@@ -1,5 +1,8 @@
 """
 Author: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+
+This file allows us to generate random numbers between 0 and k using the RandomGen class. It has a helper function outside of the class called lcg.
+
 """
 
 from typing import Generator

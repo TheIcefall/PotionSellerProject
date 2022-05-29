@@ -1,7 +1,7 @@
 """ Hash Table ADT
 
 Defines a Hash Table using Linear Probing for conflict resolution.
-It currently rehashes the primary cluster to handle deletion.
+It currently rehashes the primary cluster to handle deletion, it has a statistics method returning statistics from linear probing.
 """
 __author__ = 'Brendon Taylor, modified by Jackson Goerner, modified again by Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh '
 __docformat__ = 'reStructuredText'

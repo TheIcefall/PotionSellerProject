@@ -1,5 +1,9 @@
 """
 Authors: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+
+This file allows us to bring together all of the other files from this folder to play the potion seller game.
+
+It has a class Game, which allows us to play the potion seller game.
 """
 
 from __future__ import annotations
@@ -191,12 +195,10 @@ class Game:
                 if money_for_day == 0:
                     break
                 if sorted_list_of_potions[j][0] > money_for_day:  # If there is more than I'm able to purchase
-                    profit_for_day += money_for_day * sorted_list_of_potions[j][
-                        1]  # Return amount I'm able to purchase times profit factor
+                    profit_for_day += money_for_day * sorted_list_of_potions[j][1]  # Return amount I'm able to purchase times profit factor
                     break
                 else:  # If player can purchase all of the potion that there is and still have leftover money
-                    profit_for_day += sorted_list_of_potions[j][0] * sorted_list_of_potions[j][
-                        1]  # Return amount available for purchase times profit factor
+                    profit_for_day += sorted_list_of_potions[j][0] * sorted_list_of_potions[j][1]  # Return amount available for purchase times profit factor
                     money_for_day -= sorted_list_of_potions[j][0]
 
             # Append profit made for day to output list

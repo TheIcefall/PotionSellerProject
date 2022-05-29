@@ -1,5 +1,8 @@
 """
 Author: Gabriel Tucker, Leon Li, Junchi Wang, Le Nhat Minh
+
+This file gives a function of a prime number generator, allowing us to call it from other files.
+
 """
 
 def largest_prime(k: int) -> int:
